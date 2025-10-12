@@ -33,7 +33,7 @@ This project serves as a comprehensive practice environment for mastering essent
 
 ### Clone the Repository
 ```
-git clone [Your Repository URL Here]
+git clone https://github.com/srijonsbzsifat/Unit-Testing-Practice.git
 cd unit-testing-practice
 ```
 
