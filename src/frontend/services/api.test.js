@@ -53,23 +53,19 @@ describe('API Service - getTasks', () => {
     });
 
     // Test Case 3: API returns non-200 status (e.g., 404, 500)
-    test('should handle non-200 HTTP responses', async () => {
+    test('should throw error for non-200 HTTP responses', async () => {
         // Arrange: Mock a 404 response
         const mockResponse = {
             ok: false,
             status: 404,
+            statusText: 'Not Found',
             json: jest.fn().mockResolvedValue({ error: 'Not Found' })
         };
         global.fetch.mockResolvedValue(mockResponse);
 
-        // Act
-        const result = await api.getTasks();
-
-        // Assert: The current implementation doesn't check response.ok,
-        // so it will still attempt to parse JSON
+        // Act & Assert: Should throw error for non-200 status
+        await expect(api.getTasks()).rejects.toThrow('HTTP 404: Not Found');
         expect(global.fetch).toHaveBeenCalledTimes(1);
-        expect(mockResponse.json).toHaveBeenCalledTimes(1);
-        expect(result).toEqual({ error: 'Not Found' });
     });
 
     // Test Case 4: API returns invalid JSON
@@ -83,8 +79,8 @@ describe('API Service - getTasks', () => {
         };
         global.fetch.mockResolvedValue(mockResponse);
 
-        // Act & Assert
-        await expect(api.getTasks()).rejects.toThrow('Unexpected token < in JSON');
+        // Act & Assert - Now properly wraps the error
+        await expect(api.getTasks()).rejects.toThrow('Failed to fetch tasks: Unexpected token < in JSON');
         expect(global.fetch).toHaveBeenCalledTimes(1);
         expect(mockResponse.json).toHaveBeenCalledTimes(1);
     });
