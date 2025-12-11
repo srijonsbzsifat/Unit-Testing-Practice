@@ -1,5 +1,5 @@
 // Import the unit under test
-const { loadTasks } = require('../logic/task_list');
+const { loadTasks } = require('./task_list');
 
 // Import the dependency to be mocked
 const api = require('../services/api');
